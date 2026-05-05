@@ -1,0 +1,719 @@
+GAME DESIGN DOCUMENT
+[WORKING TITLE]
+An Aviation Corporate Strategy Board Game
+Version 1.0  |  Design Draft
+
+
+1. Game Overview
+1.1 Core Philosophy
+This is a cutthroat corporate strategy board game set in the North American aviation industry. The central tension is between institutional health and personal enrichment. Players are not simply building airlines — they are exploiting them.
+
+Win Condition
+Highest Personal Net Worth at game end. Net Worth = Liquid Cash + Total Stock Value across all holdings. The player who runs the biggest airline does not necessarily win. The player who extracts the most wealth does.
+
+
+1.2 The Mammoth Trap
+Running a massive airline is a burden, not a guaranteed path to victory. Overhead scales aggressively with network size. The truly dangerous player is often the one sitting quietly with diversified holdings across multiple airlines, collecting dividends while CEOs compete to see who can build the most expensive liability.
+1.3 Player Count & Play Time
+Player Count
+Notes
+2 Players
+Loose — limited collusion texture; essentially a direct duel
+3 Players
+Minimum for full dynamics to emerge
+4 Players
+Target sweet spot — all archetypes viable
+5-6 Players
+Full war — maximum chaos, maximum drama
+
+
+Target play time: 90 minutes.
+
+2. Design Aesthetic
+High-Fidelity Essentialist — no unnecessary complexity in components or rules
+Unbranded color palettes (e.g., Navy/Red, Canyon Blue/Yellow) represent real airlines without IP issues
+Minimalist wooden sticks for routes, acrylic cubes for demand, satisfying tactile pegboards for the corporate dashboard
+All treasury values are fully public — open cash trays on the corporate dashboard at all times
+
+3. Board Architecture & Components
+3.1 The Map
+North American map featuring strict predefined Trunk and Spoke printed route lines. The board begins in a predetermined scenario setup (similar to Axis & Allies), so players step into a living world immediately — existing partial route networks, stacked demand cubes, and ghost airlines already operating.
+
+Route Slots
+Every printed route line has exactly two slots: Primary (Top/Left) and Secondary (Bottom/Right)
+Route sticks are placed in these slots to indicate airline occupancy
+Both slots occupied by different airlines triggers a Fare War
+
+City Tiers
+Tier
+Examples
+Characteristics
+Mega-Hub
+Chicago, Atlanta, Dallas, New York, LAX
+High base demand, hub bonus magnet, most contested
+Focus City
+Mid-size metros
+Moderate demand, viable spoke targets
+Regional
+Small markets
+Low base demand, valuable only when hub-connected
+
+
+Demand Cubes
+Physical stackable cubes on city nodes represent market revenue
+Base revenue for a route = sum of Demand Cubes at connected cities
+Cubes are added/removed during the Event Card phase based on macroeconomic conditions
+Empty routes are economically normal — a route that loses money at $6 fuel may be a land-grab at $3 fuel
+
+3.2 The Corporate Dashboard
+A central premium pegboard visible to all players at all times. Tracks every airline in the game simultaneously.
+
+Component
+Function
+Stock Price Slider
+Current stock price per share (calculated, not hidden)
+Outstanding Shares Dial
+Total shares issued for this airline
+Ownership Pegs
+Numbered pegs showing how many shares each player holds
+Treasury Tray
+Physical cash tray — all balances public at all times
+
+
+Design Note: Full Transparency
+Treasury balances must be fully public. Hidden treasuries break the strategic core of the game — every player must be able to calculate whether an airline can survive a fuel spike or afford a dividend payout. Open cash trays enforce this without any rule overhead.
+
+
+4. The Stock Market & Capital Flow
+4.1 Stock Price Formula
+
+Stock Price Formula
+Stock Price = Total Routes + (Total Hubs x 3)This formula is 100% transparent. Every player can calculate any airline's stock price at any time by looking at the board.
+
+
+4.2 Buying & Selling Stock
+Shares are unlimited — any player may buy any number of shares in any airline at any time during the stock phase
+When a player buys shares, cash goes DIRECTLY into the Airline's Treasury
+When a player sells shares, cash comes from the Bank — the airline treasury is untouched
+No player may be prevented from buying or selling shares in any airline
+Shares can be used as investment, dilution instruments, takeover weapons, or alliance signals
+
+The Dilution Dynamic
+Every share purchase simultaneously does four things:
+Invests capital into the airline (treasury funded)
+Dilutes every existing shareholder's future dividend per share
+Moves the buyer one step closer to the 5-share CEO threshold
+Signals intent that every other player can read publicly
+
+Hostile Share Accumulation
+An enemy buying into your airline is a weapon. If your airline has 10 shares outstanding and pays $2/share dividends, a hostile player buying 5 more shares cuts every existing shareholder's payout by one third. No vote required.
+
+4.3 CEO Control
+The player with the most shares in an airline, minimum 5, controls that airline as CEO
+A player may hold the CEO chair in multiple airlines simultaneously
+CEO turns require operational decisions — multiple CEOs means more decisions per round
+
+4.4 Ghost Fleets (Autopilot Airlines)
+Airlines without a CEO (fewer than 5 shares held by any single player) run on autopilot.
+Ghost airlines automatically pay a flat $1/share dividend from the Bank each round
+Ghost airlines have no live treasury and cannot expand or change routes
+The predetermined board setup creates multiple ghost fleets at game start, creating immediate investor decisions
+Ghost fleet routes remain on the board and can trigger fare wars with live airlines
+
+Why Ghost Fleets Matter
+Ghost fleets are passive income machines. A player collecting $1/share from 3 ghost airlines while others fight fare wars and fuel spikes can quietly accumulate the winning net worth. But ghost airlines are also sitting ducks — their fixed routes and autopilot behavior make them predictable targets for fare war harassment.
+
+
+5. CEO Operations — The Turn Sequence
+5.1 Complete Turn Structure
+
+Critical Timing Note
+Revenue is collected BEFORE routes are placed, but expenses are paid AFTER — INCLUDING on newly placed routes. Every expansion is a bet made with last round's money against next round's costs. There is no grace period.
+
+
+Phase 1 — Player Stock Market (Round Robin)
+All players buy and sell stock round-robin, one action per turn. When all players pass consecutively, proceed to the Airlines Phase.
+
+Phase 2 — Airlines Phase
+Collect Revenue — base route revenue + hub bonuses, minus fare war penalties. Stock purchase cash enters treasury asynchronously as purchases occur.
+Plan Routes — round robin, add or remove one route per turn. Declare any M&A actions. When all pass, route planning ends.
+Pay Expenses — fuel costs on ALL current routes (including newly placed this phase), hub taxes at progressive rates.
+Resolve Bankruptcies — any airline that cannot pay expenses enters bankruptcy proceedings.
+CEO Dividend Declarations — each CEO declares dividend payout per share, cash leaves treasury to investors.
+
+Phase 3 — Event & Admin
+Draw Era event cards
+Set new fuel price
+Perform CEO evaluation (share counts checked — control may change)
+Check end-of-game triggers
+
+5.2 Revenue Collection Detail
+Base Revenue
+Sum of all Demand Cubes connected by the airline's routes
+Hub Bonus
+Routes touching a Hub city generate an automatic +$2 bonus (simulates connecting traffic)
+Hubs entrench an airline in high-traffic markets and meaningfully inflate stock price via the formula
+Fare War Penalty
+Triggered when two different airlines occupy both the Primary and Secondary slots on the same route
+Both airlines suffer a flat -$2 revenue penalty for that route
+Fare wars function as a deterrent, not just a punishment — a contested route is often worth less than an uncontested regional one
+Small airlines with 4-5 routes can surgically contest the most profitable routes of a giant, imposing a cost on dominance without needing to match its scale
+
+5.3 Route Management
+Placing Routes
+Route sticks are FREE to add or remove — no placement cost
+The true cost is operational overhead paid at end of phase
+This makes route management a risk calculus, not a resource gate
+Building Hubs
+Costs $15 from the Treasury
+Grants exactly 2 free route placements instantly upon construction
+Maximum 1 Hub per city
+Hub tax is progressive and escalates with network size (see Expenses)
+Hubs raise stock price by +3 per hub via the stock formula, making them entrenchment tools
+
+5.4 Expense Structure
+Expense Type
+Formula
+Notes
+Fuel Costs
+Total Routes x Current Fuel Price
+Fuel price set by Era deck each round
+Hub Tax — First Hub
+$6 per round
+Fixed
+Hub Tax — Second Hub
+$8 per hub per round
+Each hub costs $8
+Hub Tax — Third Hub+
+$12 per hub per round
+Escalates sharply
+
+
+Fuel Price Range (Design Target)
+Base fuel: ~$2-4 per route. Spike fuel: up to $6 per route. An airline with 15 routes swings from $30-60 to $90 in expenses during a spike. Lean airlines survive. Overextended airlines collapse. This is intentional.
+
+
+5.5 Dividend Declarations
+CEO simply declares a per-share payout amount (e.g., '$2 per share')
+Cash leaves the Treasury and goes directly to all shareholders proportionally
+No division math required — CEO names the rate, multiply by shares held
+Dividend hoarding creates risk: treasury accumulates, making the airline an attractive takeover target
+Refusing dividends while other investors collect income elsewhere puts a visible target on the CEO's back
+
+6. Bankruptcy & The Phoenix Mechanic
+6.1 Bankruptcy Trigger
+If a Treasury cannot cover total expenses, the airline enters bankruptcy
+The airline is wiped from the board — all routes and hubs removed
+Stock price drops to $0
+All shareholders of the bankrupt airline receive $1 per share conciliation payment from the Bank
+Players retain their personal cash and all other stock holdings — no player is eliminated
+
+Key Design Principle
+Players are permanently independent from any single airline. A CEO whose airline collapses is immediately back to being a pure investor. They may quietly accumulate shares in the airline that just absorbed their market share.
+
+
+6.2 The Phoenix Mechanic — Relaunching a Bankrupt Airline
+During Phase 1 (Stock Market) of the following round, any bankrupt airline may be relaunched via silent auction.
+
+Auction Process
+Any player may bid to relaunch a bankrupt airline
+All interested players write a secret bid (minimum $10)
+Bids are revealed simultaneously
+Highest bidder wins — their bid goes DIRECTLY into the airline's new treasury
+Winner receives 3 shares in the airline and the CEO chair
+Airline enters service in Phase 2 of the same round
+
+No Relaunch
+Players may collectively opt not to relaunch an airline
+The route slots on the map return to empty and become available territory
+
+7. Hostile Takeovers (M&A)
+7.1 Overview
+A CEO can use their airline's War Chest to launch a formal 3-round acquisition siege against a rival airline. This is announced publicly and is binding once declared.
+
+7.2 Takeover Sequence
+ANNOUNCE: Attacking CEO formally declares the target airline during Route Planning phase
+FREEZE: Attacker has 3 rounds to accumulate cash in their treasury equal to the Target's Total Market Cap (Stock Price x Outstanding Shares)
+DEFEND: Target CEO may raise their stock price by adding routes and hubs — making the buyout more expensive. However, this burns treasury on overhead.
+RESOLVE: At the end of round 3, compare attacker treasury to target market cap
+
+Resolution — Success
+Attacker absorbs all routes and hubs of the target airline
+Redundant hubs (same city) are liquidated for a cash bonus
+Target shareholders receive a payout at the final market cap price per share
+Target airline ceases to exist as a separate entity
+Resolution — Failure
+Attacker pays a flat $15 Legal/Admin penalty from their Treasury to the Bank
+No other consequence — the siege simply ends
+
+Bluff Tax Design Note
+The $15 penalty goes to the Bank, not the defender. This prevents defenders from being incentivized to encourage harassment sieges just to farm the penalty. The penalty creates genuine commitment cost without weaponizing it.
+
+
+7.3 Collusion & Table Politics
+No agreements are binding. All deals are enforced only by reputation and self-interest. This is intentional.
+
+Players holding shares in two airlines are natural brokers between their CEOs
+A CEO may pay dividends specifically to maintain the loyalty of a pivotal investor
+Fare war contestation is the visible signal that an alliance has ended
+Kingmaking (a trailing player deciding the winner by their share sales) is legal, expected, and should be treated as a feature of the game, not a bug
+Table talk is always legal — no information is secret beyond personal cash holdings and bid amounts in silent auctions
+
+8. Player Archetypes & Strategic Depth
+8.1 The Four Archetypes
+These are not rigid roles but a strategic spectrum. A player may shift archetype mid-game as conditions change.
+
+The Pure Investor
+Never holds the CEO chair — or holds it briefly and deliberately exits
+Diversifies across 3-5 airlines, collecting dividends from each
+Controls nothing directly but is indispensable to every CEO who needs loyal majority shareholders
+Weakness: entirely dependent on CEOs not mismanaging their airlines
+Counter: patient, disciplined, and the hardest archetype to identify as a threat until it is too late
+
+The Cash Cow CEO
+Builds one dominant airline, entrench hubs, pumps stock price
+Extracts wealth via self-dividends — controls when and how much to pay
+Strength: maximum control over a single powerful asset
+Weakness: overhead scales brutally, fare wars become unavoidable at scale, becomes the most attractive M&A target on the board
+The Mammoth Trap: the tallest tree attracts the most lightning
+
+The Long-Game CEO
+Builds efficiently with an eye on sustainable overhead rather than maximum expansion
+Delays extraction in favor of stock price growth — plans to cash out at the right moment
+The Long-Game CEO becomes the Cash Cow CEO through pure mechanical pressure once the treasury grows fat enough
+Weakness: other investors may accumulate shares and challenge for the CEO chair before the patient plan matures
+
+The Startup Raider
+Runs lean, often late-game airlines with minimal overhead
+Deliberately contests the most profitable routes of giants to suppress their revenue via fare wars
+Accumulates shares in wounded giants while they are financially distressed
+Either triggers a bankruptcy to absorb them cheaply or mounts a formal takeover
+Weakness: $15 earnest money on failed takeovers; 3-round siege window requires precise timing
+
+The Rock-Paper-Scissors Dynamic
+Pure Investor needs Cash Cow CEO to pay dividends. Cash Cow CEO needs Startup Raider to not exist. Startup Raider needs Pure Investor to not hold enough shares to defend the giant being targeted. No single archetype dominates — optimal play shifts with the board state.
+
+
+8.2 The Institutional Decay Arc
+The most thematically rich dynamic in the game: a CEO who begins as Long-Game inevitably faces the mechanical temptation to extract. The treasury grows. Other investors are collecting dividends from other airlines. The CEO's own shares are illiquid. The shift from Long-Game to Cash Cow to collapse is not a moral failing — it is the natural outcome of the mechanics, and it mirrors real corporate history with uncomfortable accuracy.
+
+9. Eras & Scenario Design
+9.1 Overview
+The game features 3 distinct era decks, each a separate scenario with unique board setup, varying ghost fleets, and distinct macroeconomic event cards. Each era creates a different game feel and rewards different strategies.
+
+1950s Golden Age
+High demand across major corridors, low base fuel costs
+Large ghost fleets — aviation is new, glamorous, and undercontrolled
+Game is expansionist and optimistic early; consolidation hits as event cards progress
+Sample events: Jet Age arrival (route value shift), government regulation, international route auctions
+
+1980s Deregulation
+High fuel volatility — spikes frequent and severe
+New routes opening constantly, fare wars endemic from early rounds
+Bankruptcy common — the Phoenix mechanic fires frequently
+Recommended for experienced players — maximum chaos, maximum drama
+Sample events: sudden deregulation (route slot expansion), fuel crisis, mega-merger rumors
+
+2010s Consolidation
+Fewer ghost fleets — industry already concentrated at game start
+Massive predetermined route networks with high overhead built in
+M&A is the dominant mechanic — formal takeovers fire multiple times per game
+Game is slower, more calculated; stock price end triggers fire faster
+Investor archetypes dominate — CEO roles are high-stakes and high-pressure
+
+Era Deck Pacing Principle
+First 2-3 event cards in each era should be mild — let the game find its footing before volatility spikes. Front-loaded chaos punishes new players in ways that feel unfair rather than instructive. Volatility should escalate as the game matures.
+
+
+10. End Game Triggers & Final Scoring
+10.1 Acquire-Style Triggers
+The game ends instantly when either of the following conditions is met:
+
+Trigger
+Condition
+Trigger A
+One single airline reaches a Stock Price of $40 or higher
+Trigger B
+Three different airlines each reach a Stock Price of $25 or higher
+
+
+10.2 Final Scoring
+
+Final Score Formula
+Personal Net Worth = Liquid Cash in Hand + (Shares Owned x Current Stock Price per airline, summed across all holdings)The player with the highest Net Worth wins.
+
+
+11. Map Design Guidelines
+11.1 Density Targets
+Total route slots: approximately 120-160 across the full map
+Enough for 6-8 airlines to each hold 12-18 routes without total saturation
+Two airlines building aggressively should begin crowding each other; three should trigger endemic fare wars
+Empty route slots are the norm — economic viability, not map coverage, determines where airlines operate
+
+11.2 Trunk vs. Spoke Geometry
+Trunks: high-revenue contested corridors (Chicago-New York, Dallas-LA, Atlanta-Miami) — the battleground routes
+Spokes: quieter feeders that become valuable only when connected to an entrenched hub
+The map encodes strategic geography — players intuitively understand why Atlanta is always contested
+
+11.3 Scenario Setup
+Each era scenario specifies starting route placements, demand cube distributions, and ghost fleet compositions
+Setup is predetermined — players read a living world, not a blank slate
+This creates immediate round-1 strategic decisions: which ghost airline is undervalued? Where is demand highest?
+
+12. Component Summary
+Component
+Quantity / Notes
+Corporate Dashboard (pegboard)
+1 central board
+Route Sticks
+Enough for all airlines to fill the map
+Demand Cubes (stackable, acrylic)
+Multiple per city, several colors
+Stock Price Sliders
+One per airline on dashboard
+Outstanding Shares Dials
+One per airline on dashboard
+Ownership Pegs
+One set per player per airline slot
+Treasury Trays (physical cash)
+One per airline, open and visible
+Era Decks (3 separate)
+1950s, 1980s, 2010s
+Fuel Price Marker
+Visible on dashboard or board edge
+Player Cash
+Physical denomination coins or bills
+Hub Tokens
+2-3 per city maximum
+Route Stick Holders
+One per airline color
+Silent Auction Screens
+One per player for bid concealment
+Scenario Setup Cards
+One per era, specifying starting state
+
+
+13. Open Design Questions
+These items require resolution before final rules documentation:
+
+Game name — currently working title only
+Exact starting cash amounts for players and ghost fleet treasury seeding
+Precise fuel price range per era (design target: base $2-4, spike up to $6)
+Exact demand cube values per city tier
+Total number of airlines per scenario (ghost + live)
+Whether a maximum route change cap per airline per round is needed for pacing in 5-6 player games
+Exact end-game stock price thresholds ($40/$25 are placeholders pending economic calibration)
+Physical component specifications and manufacturer targets
+Whether any one-time special action cards exist, or if all mechanics are systemic
+
+Design Document v1.0  —  Living Document, Subject to Revision Through Playtesting
+
+
+================================================================
+ADDENDUM: MAP DATA & PROTOTYPE PROMPT
+Section 14 — City Nodes, Route Network, and Gemini CLI Prompt
+================================================================
+
+-------------------------------------------------------------------
+14.1 CITY NODE LIST
+-------------------------------------------------------------------
+32 cities across North America. Coordinates are expressed as
+percentages of a standard 1000x600 SVG viewport, origin top-left.
+Adjust proportionally if your SVG viewport differs.
+
+Tier key: MH = Mega-Hub | FC = Focus City | RG = Regional
+
+ID  | Name                  | Tier | SVG_X | SVG_Y | Notes
+----|----------------------|------|-------|-------|-------------------
+ATL | Atlanta, GA           | MH   | 640   | 340   | SE mega-hub
+ORD | Chicago, IL           | MH   | 580   | 240   | Midwest mega-hub
+DFW | Dallas/Fort Worth, TX | MH   | 510   | 370   | South-central hub
+LAX | Los Angeles, CA       | MH   | 130   | 340   | West Coast hub
+JFK | New York, NY          | MH   | 760   | 210   | NE mega-hub
+MIA | Miami, FL             | MH   | 680   | 430   | SE gateway
+DEN | Denver, CO            | MH   | 380   | 270   | Rocky Mtn hub
+SEA | Seattle, WA           | FC   | 110   | 130   | Pacific NW
+SFO | San Francisco, CA     | FC   | 110   | 290   | Bay Area
+PHX | Phoenix, AZ           | FC   | 260   | 370   | Desert SW
+MSP | Minneapolis, MN       | FC   | 530   | 180   | Upper Midwest
+DTW | Detroit, MI           | FC   | 650   | 220   | Great Lakes
+BOS | Boston, MA            | FC   | 790   | 190   | New England
+IAH | Houston, TX           | FC   | 530   | 410   | Gulf Coast
+CLT | Charlotte, NC         | FC   | 700   | 300   | Mid-Atlantic S
+PHI | Philadelphia, PA      | FC   | 760   | 230   | Mid-Atlantic N
+STL | St. Louis, MO         | FC   | 570   | 290   | Midwest bridge
+SLC | Salt Lake City, UT    | FC   | 280   | 250   | Mountain West
+MSY | New Orleans, LA       | FC   | 580   | 400   | Gulf South
+YYZ | Toronto, ON           | FC   | 710   | 190   | Canada East
+YVR | Vancouver, BC         | FC   | 120   | 100   | Canada West
+MCO | Orlando, FL           | FC   | 680   | 400   | FL interior
+TPA | Tampa, FL             | RG   | 660   | 420   | FL west coast
+SAT | San Antonio, TX       | RG   | 500   | 420   | TX interior
+AUS | Austin, TX            | RG   | 510   | 400   | TX tech corridor
+OKC | Oklahoma City, OK     | RG   | 490   | 340   | OK/Plains
+MEM | Memphis, TN           | RG   | 600   | 330   | Mid-South
+IND | Indianapolis, IN      | RG   | 620   | 260   | Midwest bridge
+CMH | Columbus, OH          | RG   | 670   | 255   | OH interior
+PIT | Pittsburgh, PA        | RG   | 720   | 240   | Appalachian gw
+BNA | Nashville, TN         | RG   | 630   | 305   | SE interior
+ABQ | Albuquerque, NM       | RG   | 340   | 360   | SW corridor
+
+-------------------------------------------------------------------
+14.2 ROUTE NETWORK
+-------------------------------------------------------------------
+88 total routes. Each has a unique ID, two city endpoints, and a
+classification for demand weighting. Every route has 2 slots
+(Primary + Secondary). No Trunk/Spoke distinction in rules —
+classification is for Era setup card demand cube seeding only.
+
+H = High demand (3 cubes at setup)
+M = Medium demand (2 cubes)
+L = Low demand (1 cube)
+
+Route ID | City A | City B | Demand | Notes
+---------|--------|--------|--------|---------------------------
+R001 | JFK | BOS | H | NE corridor, most contested
+R002 | JFK | PHI | H | NE commuter
+R003 | JFK | ORD | H | Flagship trunk
+R004 | JFK | ATL | H | Major SE corridor
+R005 | JFK | MIA | H | Eastern seaboard
+R006 | JFK | YYZ | M | Canada gateway
+R007 | BOS | PHI | M | NE chain
+R008 | BOS | YYZ | M | Canada NE link
+R009 | PHI | CLT | M | Mid-Atlantic
+R010 | PHI | PIT | M | PA corridor
+R011 | PIT | CLT | L | Appalachian
+R012 | PIT | DTW | M | Great Lakes E
+R013 | PIT | CMH | L | OH gateway
+R014 | CLT | ATL | H | SE corridor
+R015 | CLT | MIA | M | SE coast
+R016 | ATL | MIA | H | SE flagship
+R017 | ATL | ORD | H | SE-Midwest trunk
+R018 | ATL | DFW | H | Southern trunk
+R019 | ATL | IAH | M | Gulf approach
+R020 | ATL | BNA | M | Interior SE
+R021 | ATL | MEM | M | Deep South
+R022 | ATL | MCO | M | FL feeder
+R023 | MIA | MCO | M | FL interior
+R024 | MIA | TPA | M | FL triangle
+R025 | MCO | TPA | L | FL local
+R026 | ORD | DTW | H | Great Lakes W
+R027 | ORD | MSP | H | Upper Midwest
+R028 | ORD | STL | M | Midwest bridge
+R029 | ORD | IND | M | IN corridor
+R030 | ORD | MEM | M | Deep South entry
+R031 | ORD | DFW | H | S-Midwest trunk
+R032 | ORD | DEN | H | Midwest-Mountain
+R033 | ORD | YYZ | M | Canada Midwest
+R034 | DTW | CMH | M | OH loop
+R035 | DTW | IND | L | IN bridge
+R036 | DTW | YYZ | M | Border corridor
+R037 | MSP | STL | M | Plains N-S
+R038 | MSP | DEN | M | Northern Rockies
+R039 | MSP | YVR | L | NW Canada link
+R040 | STL | MEM | M | River corridor
+R041 | STL | OKC | L | SW Plains
+R042 | IND | CMH | L | OH-IN bridge
+R043 | MEM | BNA | M | TN corridor
+R044 | MEM | MSY | M | Delta corridor
+R045 | MEM | IAH | M | Gulf approach W
+R046 | BNA | CLT | M | SE interior
+R047 | BNA | DFW | M | S-Central
+R048 | DFW | IAH | H | TX triangle
+R049 | DFW | SAT | M | TX south
+R050 | DFW | AUS | M | TX capital
+R051 | DFW | OKC | M | OK-TX
+R052 | DFW | ABQ | M | SW corridor
+R053 | DFW | DEN | H | Mountain approach
+R054 | DFW | LAX | H | Southern transcontinental
+R055 | IAH | MSY | M | Gulf Coast E
+R056 | IAH | SAT | L | TX south loop
+R057 | IAH | AUS | L | TX triangle S
+R058 | SAT | AUS | L | TX local
+R059 | SAT | ABQ | L | SW interior
+R060 | AUS | ABQ | L | SW link
+R061 | OKC | ABQ | L | SW plains
+R062 | ABQ | PHX | M | Desert SW
+R063 | ABQ | DEN | M | Rockies S
+R064 | PHX | LAX | H | Desert-Coast
+R065 | PHX | DEN | M | Mountain link
+R066 | PHX | SFO | M | AZ-CA
+R067 | PHX | SLC | M | SW-Mountain
+R068 | DEN | SLC | M | Mountain corridor
+R069 | DEN | LAX | H | Mountain-Coast
+R070 | DEN | SEA | M | NW approach
+R071 | SLC | LAX | M | Interior-Coast
+R072 | SLC | SFO | M | Bay Area-Mountain
+R073 | SLC | SEA | M | NW interior
+R074 | SLC | YVR | L | Canada Mountain
+R075 | LAX | SFO | H | CA corridor, most valuable W coast
+R076 | LAX | SEA | H | West Coast trunk
+R077 | LAX | YVR | M | Canada-W coast
+R078 | SFO | SEA | H | West Coast N
+R079 | SFO | YVR | M | Canada-Bay
+R080 | SEA | YVR | M | BC border
+R081 | MSY | TPA | M | Gulf-FL
+R082 | MSY | IAH | M | Gulf W (duplicate coverage note)
+R083 | CMH | IND | L | Midwest bridge (low demand)
+R084 | YYZ | JFK | H | (mirror of R006 — separate slot set)
+R085 | MEM | ATL | M | (mirror/branch of R021)
+R086 | OKC | DFW | L | (mirror/branch of R051)
+R087 | ORD | CMH | M | IL-OH corridor
+R088 | PIT | PHI | L | PA local
+
+NOTE: Routes R084-R088 exist to create redundant coverage
+opportunities and fare war flashpoints in high-traffic zones.
+A few low-demand Regionals may sit empty most of the game —
+this is intentional design (economically unviable until fuel
+drops or demand cubes stack).
+
+Total route slots on map: 88 routes x 2 slots = 176 total slots.
+At full 6-airline capacity, each airline holding ~18 routes uses
+108 slots, leaving 68 empty — sufficient breathing room.
+
+-------------------------------------------------------------------
+14.3 ERA SETUP — GHOST FLEET CONFIGURATIONS
+-------------------------------------------------------------------
+Ghost Fleet dividends are set by Era Setup Cards, NOT a flat rate.
+D6 Volatility Roll applies to ALL Ghost Fleet dividend payouts.
+
+  Roll 1-3: $0 payout
+  Roll 4-5: Base dividend
+  Roll 6:   Base dividend + $1 bonus
+
+GHOST FLEET ARCHETYPES (used in scenario setup cards):
+
+Type         | Base Div | Notes
+-------------|----------|------------------------------------------
+Legacy Bloat | $2/share | Large route network, high overhead risk
+  Established | $1/share | Stable mid-size airline, safe investment
+Startup Lean | $1/share | Small network, low overhead, growth upside
+Falling Knife| $0/share | Near-bankruptcy, zero passive return,
+             |          | attractive only as M&A/takeover target
+
+M&A THRESHOLD FOR GHOST FLEETS:
+  Market Cap for buyout = Stock Price x 5 (fixed share count proxy)
+  (Ghost fleets have no issued share dial — use 5 as the constant)
+
+-------------------------------------------------------------------
+14.4 M&A RULES (UPDATED)
+-------------------------------------------------------------------
+- M&A failure penalty: $20 flat fee to Bank (not $15)
+- Hubs CANNOT be liquidated for cash under any circumstance,
+  including post-takeover redundant hubs. Abandoning a hub
+  removes tax liability only. No cash recovery.
+- Post-takeover redundant hubs are abandoned (not liquidated).
+  The only cash gains in the game are:
+    1. Route revenue collection
+    2. Investor share purchases entering treasury
+
+-------------------------------------------------------------------
+14.5 GEMINI CLI PROMPT — MAP COMPONENT (STEP 4)
+-------------------------------------------------------------------
+Copy this prompt into Gemini CLI after your game state and reducer
+are confirmed working from Step 3.
+
+-------- PROMPT START --------
+
+I am building a React TypeScript hotseat board game prototype.
+My game state and reducer are already implemented.
+Reference aviation_game_gdd.txt for all game rules and context.
+
+Task: Build a MapComponent using SVG.
+
+VIEWPORT: The SVG should be 1000x600. The North America outline
+SVG I will supply separately as a background <image> element at
+x=0 y=0 width=1000 height=600.
+
+CITY NODES: Place a <circle> for each city at the coordinates
+listed below. Radius 8 for Mega-Hubs, 6 for Focus Cities, 4 for
+Regionals. Default fill: white. Stroke: #1B2A4A. Show city ID
+as a <text> label offset 10px below each node.
+
+CITIES (id, x, y, tier):
+ATL 640 340 MH | ORD 580 240 MH | DFW 510 370 MH | LAX 130 340 MH
+JFK 760 210 MH | MIA 680 430 MH | DEN 380 270 MH | SEA 110 130 FC
+SFO 110 290 FC | PHX 260 370 FC | MSP 530 180 FC | DTW 650 220 FC
+BOS 790 190 FC | IAH 530 410 FC | CLT 700 300 FC | PHI 760 230 FC
+STL 570 290 FC | SLC 280 250 FC | MSY 580 400 FC | YYZ 710 190 FC
+YVR 120 100 FC | MCO 680 400 FC | TPA 660 420 RG | SAT 500 420 RG
+AUS 510 400 RG | OKC 490 340 RG | MEM 600 330 RG | IND 620 260 RG
+CMH 670 255 RG | PIT 720 240 RG | BNA 630 305 RG | ABQ 340 360 RG
+
+ROUTES: Draw a <line> for each route connecting its two city
+coordinates. Each route has TWO slots (Primary, Secondary).
+Render slots as two thin colored rectangles (width 6, height 18)
+centered on the route midpoint, offset perpendicular to the line
+by +5px and -5px respectively. Empty slots: fill #CCCCCC.
+Occupied slots: fill = the airline's assigned color.
+
+INTERACTIONS:
+- Clicking a slot calls props.onSlotClick(routeId, slot)
+  where slot is 'primary' or 'secondary'
+- Hovering a route line highlights it with opacity 0.6
+- Clicking a city node calls props.onCityClick(cityId)
+
+PROPS INTERFACE:
+  routeState: Record<routeId, { primary: string|null, secondary: string|null }>
+  onSlotClick: (routeId: string, slot: 'primary'|'secondary') => void
+  onCityClick: (cityId: string) => void
+  airlineColors: Record<airlineId, string>
+
+ROUTE LIST (routeId, cityA, cityB):
+R001 JFK BOS | R002 JFK PHI | R003 JFK ORD | R004 JFK ATL
+R005 JFK MIA | R006 JFK YYZ | R007 BOS PHI | R008 BOS YYZ
+R009 PHI CLT | R010 PHI PIT | R011 PIT CLT | R012 PIT DTW
+R013 PIT CMH | R014 CLT ATL | R015 CLT MIA | R016 ATL MIA
+R017 ATL ORD | R018 ATL DFW | R019 ATL IAH | R020 ATL BNA
+R021 ATL MEM | R022 ATL MCO | R023 MIA MCO | R024 MIA TPA
+R025 MCO TPA | R026 ORD DTW | R027 ORD MSP | R028 ORD STL
+R029 ORD IND | R030 ORD MEM | R031 ORD DFW | R032 ORD DEN
+R033 ORD YYZ | R034 DTW CMH | R035 DTW IND | R036 DTW YYZ
+R037 MSP STL | R038 MSP DEN | R039 MSP YVR | R040 STL MEM
+R041 STL OKC | R042 IND CMH | R043 MEM BNA | R044 MEM MSY
+R045 MEM IAH | R046 BNA CLT | R047 BNA DFW | R048 DFW IAH
+R049 DFW SAT | R050 DFW AUS | R051 DFW OKC | R052 DFW ABQ
+R053 DFW DEN | R054 DFW LAX | R055 IAH MSY | R056 IAH SAT
+R057 IAH AUS | R058 SAT AUS | R059 SAT ABQ | R060 AUS ABQ
+R061 OKC ABQ | R062 ABQ PHX | R063 ABQ DEN | R064 PHX LAX
+R065 PHX DEN | R066 PHX SFO | R067 PHX SLC | R068 DEN SLC
+R069 DEN LAX | R070 DEN SEA | R071 SLC LAX | R072 SLC SFO
+R073 SLC SEA | R074 SLC YVR | R075 LAX SFO | R076 LAX SEA
+R077 LAX YVR | R078 SFO SEA | R079 SFO YVR | R080 SEA YVR
+R081 MSY TPA | R082 MSY IAH | R083 CMH IND | R084 YYZ JFK
+R085 MEM ATL | R086 OKC DFW | R087 ORD CMH | R088 PIT PHI
+
+Do not build any other UI. Export MapComponent as default.
+Use React functional component with TypeScript.
+Keep all SVG rendering logic inside the component.
+No external map libraries.
+
+-------- PROMPT END --------
+
+-------------------------------------------------------------------
+14.6 DESIGN NOTES ON THE MAP DATA
+-------------------------------------------------------------------
+- ATL, ORD, DFW, JFK are the four most-connected nodes by design.
+  These will be the natural flashpoints for fare wars and hub
+  entrenchment. Expect 80% of M&A activity to orbit these cities.
+
+- The West Coast triangle (LAX-SFO-SEA) is intentionally dense —
+  3 high-demand routes in a tight cluster rewards a focused
+  West Coast airline archetype.
+
+- The TX interior cluster (DFW-IAH-SAT-AUS) creates a regional
+  battleground that rewards a "Southwest Airlines" style lean
+  operator with tight geographic focus.
+
+- Canada nodes (YYZ, YVR) are peripheral but provide low-
+  competition routes for patient investors building ghost fleets
+  or startup airlines away from the main fare war zones.
+
+- Low-demand Regionals (CMH, PIT, IND, ABQ interior routes) are
+  economically marginal at base fuel price. They become valuable
+  when: (a) fuel drops, (b) a hub is built nearby, or (c) a player
+  wants to contest a rival's spoke traffic cheaply.
+
+================================================================
+END OF MAP ADDENDUM
+================================================================

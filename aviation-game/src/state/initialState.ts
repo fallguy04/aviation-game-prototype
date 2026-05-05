@@ -109,5 +109,15 @@ export const initialState1950s: GameState = {
   activePlayerIndex: 0,
   consecutivePasses: 0,
   era: '1950s',
+  eraSetup: {
+    era: '1950s',
+    ghostBaseDividend: {
+      'G1': 2, // American (Legacy/Bloated)
+      'G2': 1, // United (Standard)
+      'G3': 1, // Eastern
+      'G4': 0, // Delta (Startup/Falling Knife)
+    },
+    fuelRange: [2, 4],
+  },
   gameLog: ['Game Started: 1950s Golden Age scenario.'],
 };

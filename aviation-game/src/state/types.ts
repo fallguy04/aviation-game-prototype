@@ -52,6 +52,12 @@ export type TurnPhase =
 
 export type Era = '1950s' | '1980s' | '2010s';
 
+export interface EraSetup {
+  era: Era;
+  ghostBaseDividend: Record<string, number>; // Airline ID -> Base Dividend
+  fuelRange: [number, number];
+}
+
 export interface GameState {
   players: Player[];
   airlines: Airline[];
@@ -63,6 +69,8 @@ export interface GameState {
   activePlayerIndex: number;
   consecutivePasses: number;
   era: Era;
+  eraSetup: EraSetup;
+  lastRoll?: number;
   gameLog: string[];
 }
 

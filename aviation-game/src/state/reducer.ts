@@ -382,7 +382,10 @@ export const gameReducer = (state: GameState, action: GameAction): GameState => 
 
           // RESOLVE AT END OF ROUND 3 (roundsRemaining === 1 here)
           const targetPrice = calculateStockPrice(target, state.routes);
-          const targetMarketCap = targetPrice * target.sharesOutstanding;
+          
+          // M&A threshold for Ghost Fleets is Stock Price x 5
+          const isGhost = !target.ceoId;
+          const targetMarketCap = isGhost ? targetPrice * 5 : targetPrice * target.sharesOutstanding;
 
           if (attacker.treasury >= targetMarketCap) {
             // SUCCESS
@@ -416,26 +419,34 @@ export const gameReducer = (state: GameState, action: GameAction): GameState => 
       }
 
       if (state.phase === 'AIRLINES_DIVIDENDS') {
-        // Ghost Fleet Payouts
+        // Ghost Fleet Payouts (D6 Volatility Roll)
+        const roll = Math.floor(Math.random() * 6) + 1;
+
         nextAirlines.forEach(a => {
           if (!a.isBankrupt && !a.ceoId) {
-            // Roll D6 (Simplified: random here, or could be part of state)
-            const roll = Math.floor(Math.random() * 6) + 1;
-            let dividend = 0;
-            if (roll >= 4 && roll <= 5) dividend = 1;
-            if (roll === 6) dividend = 2;
+            const baseDividend = state.eraSetup.ghostBaseDividend[a.id] ?? 1;
+            let finalPayoutPerShare = 0;
 
-            if (dividend > 0) {
-              nextLog.push(`Ghost Fleet ${a.name} pays $${dividend}/share (Roll: ${roll})`);
+            if (roll >= 4 && roll <= 5) {
+              finalPayoutPerShare = baseDividend;
+            } else if (roll === 6) {
+              finalPayoutPerShare = baseDividend + 1;
+            }
+
+            if (finalPayoutPerShare > 0) {
+              nextLog.push(`Ghost Fleet ${a.name} pays $${finalPayoutPerShare}/share (Roll: ${roll}, Base: ${baseDividend})`);
               nextPlayers = nextPlayers.map(p => {
                 const shares = a.shareholders[p.id] || 0;
-                return { ...p, cash: p.cash + (shares * dividend) };
+                return { ...p, cash: p.cash + (shares * finalPayoutPerShare) };
               });
             } else {
-              nextLog.push(`Ghost Fleet ${a.name} pays $0 dividend (Roll: ${roll})`);
+              nextLog.push(`Ghost Fleet ${a.name} pays $0 (Roll: ${roll}, Stagnation)`);
             }
           }
         });
+
+        // Set lastRoll and continue to updateCEOs if next phase is EVENT_ADMIN
+        state.lastRoll = roll; 
       }
 
       if (nextPhase === 'EVENT_ADMIN') {

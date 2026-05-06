@@ -13,7 +13,17 @@ interface MapComponentProps {
 }
 
 const AIRLINE_CODES: Record<string, string> = {
-  Continental: 'CO', Eastern: 'EA', PanAm: 'PA', TWA: 'TW', Braniff: 'BN', Northeast: 'NE'
+  Continental: 'CO', Eastern: 'EA', PanAm: 'PA', TWA: 'TW', Braniff: 'BN', Northeast: 'NE',
+  Southwest: 'WN', Piedmont: 'PI', American: 'AA', United: 'UA', Delta: 'DL', JetBlue: 'B6', Spirit: 'NK', Alaska: 'AS'
+};
+
+const getContrastColor = (hexcolor: string) => {
+  if (!hexcolor || hexcolor.length < 6) return 'white';
+  const r = parseInt(hexcolor.slice(1, 3), 16);
+  const g = parseInt(hexcolor.slice(3, 5), 16);
+  const b = parseInt(hexcolor.slice(5, 7), 16);
+  const yiq = ((r * 299) + (g * 587) + (b * 114)) / 1000;
+  return (yiq >= 128) ? 'black' : 'white';
 };
 
 const MapComponent: React.FC<MapComponentProps> = ({
@@ -107,7 +117,7 @@ const MapComponent: React.FC<MapComponentProps> = ({
     if (!isDragging) return;
     const dx = e.clientX - dragStart.x;
     const dy = e.clientY - dragStart.y;
-    if (Math.abs(dx - viewTransform.x) > 5 || Math.abs(dy - viewTransform.y) > 5) setHasMoved(true);
+    if (Math.abs(dx - viewTransform.x) > 10 || Math.abs(dy - viewTransform.y) > 10) setHasMoved(true);
     setViewTransform(prev => ({ ...prev, x: dx, y: dy }));
   };
 
@@ -154,10 +164,14 @@ const MapComponent: React.FC<MapComponentProps> = ({
               if (length < 60) return null;
               const mx = (from.x + to.x) / 2; const my = (from.y + to.y) / 2;
               const sOff = slot === 'primary' ? -2 : 2;
+              const airlineColor = airlineColors[airlineId] || '#CCCCCC';
+              const contrastColor = getContrastColor(airlineColor);
+              const displayCode = AIRLINE_CODES[airlineId] || airlineId.substring(0, 2).toUpperCase();
+
               return (
                 <g transform={`translate(${mx - nx * sOff}, ${my - ny * sOff})`} pointerEvents="none">
-                  <rect x="-6" y="-5" width="12" height="10" rx="3" fill={airlineColors[airlineId]} />
-                  <text textAnchor="middle" y="3" fill="white" fontSize="8" fontWeight="bold" style={{ pointerEvents: 'none' }}>{AIRLINE_CODES[airlineId]}</text>
+                  <rect x="-6" y="-5" width="12" height="10" rx="3" fill={airlineColor} />
+                  <text textAnchor="middle" y="3" fill={contrastColor} fontSize="8" fontWeight="bold" style={{ pointerEvents: 'none' }}>{displayCode}</text>
                 </g>
               );
             };
@@ -166,39 +180,37 @@ const MapComponent: React.FC<MapComponentProps> = ({
 
             return (
               <g key={route.id}>
-                {/* Hitboxes for easier clicking */}
                 <line 
                   x1={from.x - nx * offset} y1={from.y - ny * offset} x2={to.x - nx * offset} y2={to.y - ny * offset}
-                  stroke="transparent" strokeWidth="15" style={{ cursor: isPlanning ? 'crosshair' : 'pointer' }}
-                  onClick={() => !hasMoved && onSlotClick(route.id, 'primary')} 
-                />
-                <line 
-                  x1={from.x + nx * offset} y1={from.y + ny * offset} x2={to.x + nx * offset} y2={to.y + ny * offset}
-                  stroke="transparent" strokeWidth="15" style={{ cursor: isPlanning ? 'crosshair' : 'pointer' }}
-                  onClick={() => !hasMoved && onSlotClick(route.id, 'secondary')} 
-                />
-
-                <line 
-                  x1={from.x - nx * offset} y1={from.y - ny * offset} x2={to.x - nx * offset} y2={to.y - ny * offset}
-                  stroke={state.primary ? airlineColors[state.primary] : '#B0BEC5'} 
-                  strokeWidth={state.primary ? 3 : 1} strokeOpacity={state.primary ? 0.9 : 0.6} strokeDasharray={state.primary ? "none" : "3 3"}
+                  stroke={state.primary ? airlineColors[state.primary] : '#CFD8DC'} 
+                  strokeWidth={state.primary ? 3 : 1.5} strokeOpacity={state.primary ? 0.9 : 0.4} strokeDasharray={state.primary ? "none" : "4 4"}
                   className={isPulsing(state.primary) ? 'route-pulse' : ''}
                   pointerEvents="none"
                 />
                 {state.primary && renderPill(state.primary, 'primary')}
                 
-                {(isDual || !state.primary) && (
-                  <>
-                    <line 
-                      x1={from.x + nx * offset} y1={from.y + ny * offset} x2={to.x + nx * offset} y2={to.y + ny * offset}
-                      stroke={state.secondary ? airlineColors[state.secondary] : '#B0BEC5'} 
-                      strokeWidth={state.secondary ? 3 : 1} strokeOpacity={state.secondary ? 0.9 : 0.6} strokeDasharray={state.secondary ? "none" : "3 3"}
-                      className={isPulsing(state.secondary) ? 'route-pulse' : ''}
-                      pointerEvents="none"
-                    />
-                    {state.secondary && renderPill(state.secondary, 'secondary')}
-                  </>
-                )}
+                <line 
+                  x1={from.x + nx * offset} y1={from.y + ny * offset} x2={to.x + nx * offset} y2={to.y + ny * offset}
+                  stroke={state.secondary ? airlineColors[state.secondary] : '#CFD8DC'} 
+                  strokeWidth={state.secondary ? 3 : 1.5} strokeOpacity={state.secondary ? 0.9 : 0.4} strokeDasharray={state.secondary ? "none" : "4 4"}
+                  className={isPulsing(state.secondary) ? 'route-pulse' : ''}
+                  pointerEvents="none"
+                />
+                {state.secondary && renderPill(state.secondary, 'secondary')}
+
+                {/* Hitboxes for easier clicking - Rendered LAST to be on top */}
+                <line 
+                  x1={from.x - nx * offset} y1={from.y - ny * offset} x2={to.x - nx * offset} y2={to.y - ny * offset}
+                  stroke="transparent" strokeWidth="15" 
+                  style={{ cursor: isPlanning && (!state.primary || state.primary === activeAirlineId) ? 'crosshair' : 'default' }}
+                  onClick={() => !hasMoved && onSlotClick(route.id, 'primary')} 
+                />
+                <line 
+                  x1={from.x + nx * offset} y1={from.y + ny * offset} x2={to.x + nx * offset} y2={to.y + ny * offset}
+                  stroke="transparent" strokeWidth="15" 
+                  style={{ cursor: isPlanning && (!state.secondary || state.secondary === activeAirlineId) ? 'crosshair' : 'default' }}
+                  onClick={() => !hasMoved && onSlotClick(route.id, 'secondary')} 
+                />
               </g>
             );
           })}

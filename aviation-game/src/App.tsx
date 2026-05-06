@@ -1,12 +1,24 @@
 import React, { useReducer, useState, useMemo, useEffect } from 'react';
 import MapComponent from './MapComponent';
 import { initialState } from './data/initialState';
+import { ROUTES } from './data/routeData';
 import { gameReducer } from './store/gameReducer';
 import { getAIAction } from './ai/aiAgent';
 import { Airline, GameState, Player } from './types/GameTypes';
 
 const AIRLINE_CODES: Record<string, string> = {
-  Continental: 'CO', Eastern: 'EA', PanAm: 'PA', TWA: 'TW', Braniff: 'BN', Northeast: 'NE'
+  Continental: 'CO', Eastern: 'EA', PanAm: 'PA', TWA: 'TW', Braniff: 'BN', Northeast: 'NE',
+  Southwest: 'WN', Piedmont: 'PI', American: 'AA', United: 'UA', Delta: 'DL', JetBlue: 'B6', Spirit: 'NK', Alaska: 'AS', Frontier: 'F9',
+  Northwest: 'NW', USAirways: 'US'
+};
+
+const getContrastColor = (hexcolor: string) => {
+  if (!hexcolor || hexcolor.length < 6) return 'white';
+  const r = parseInt(hexcolor.slice(1, 3), 16);
+  const g = parseInt(hexcolor.slice(3, 5), 16);
+  const b = parseInt(hexcolor.slice(5, 7), 16);
+  const yiq = ((r * 299) + (g * 587) + (b * 114)) / 1000;
+  return (yiq >= 128) ? 'black' : 'white';
 };
 
 const calculateProjectedExpenses = (airline: Airline, fuelPrice: number): number => {
@@ -80,9 +92,10 @@ const EraSelectScreen = ({ onStart }: { onStart: (era: string, names: string[], 
 
   const eras = [
     { id: '1950s', name: '1950s GOLDEN AGE', icon: '✈', subtitle: 'Dawn of Aviation', desc: 'High demand, low fuel. Large ghost fleets offer lucrative dividends. Expansionist and optimistic.', difficulty: 'BEGINNER', diffColor: '#2E7D32', players: '2-4 rec' },
-    { id: '1980s', name: '1980s DEREGULATION', icon: '⚡', subtitle: 'Chaos on Tarmac', desc: 'Volatile fuel prices. Endemic fare wars.', difficulty: 'ADVANCED', diffColor: '#EF6C00', players: '3-5 rec', comingSoon: true },
-    { id: '2010s', name: '2010s CONSOLIDATION', icon: '🏦', subtitle: 'Age of Mergers', desc: 'Concentrated markets. M&A is dominant strategy.', difficulty: 'EXPERT', diffColor: '#C62828', players: '3-4 rec', comingSoon: true }
-  ];
+    { id: '1980s', name: '1980s DEREGULATION', icon: '⚡', subtitle: 'Chaos on Tarmac', desc: 'Volatile fuel prices. Endemic fare wars.', difficulty: 'ADVANCED', diffColor: '#EF6C00', players: '3-5 rec' },
+    { id: '2000s', name: '2000s MERGER MANIA', icon: '🏦', subtitle: 'Age of Mergers', desc: 'Concentrated markets. M&A is dominant strategy.', difficulty: 'EXPERT', diffColor: '#C62828', players: '3-4 rec' },
+    { id: '2026', name: '2026 POST-MERGER', icon: '🚀', subtitle: 'Turbulence Ahead', desc: 'Spirit has collapsed. High fuel and massive debt challenge the Big Three. Sunbelt hubs dominate.', difficulty: 'ELITE', diffColor: '#7B1FA2', players: '4-6 rec' }
+    ];
 
   return (
     <div style={{ width: '100vw', height: '100vh', background: '#F0F4F8', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
@@ -98,13 +111,12 @@ const EraSelectScreen = ({ onStart }: { onStart: (era: string, names: string[], 
           </div>
           <div style={{ display: 'flex', gap: '24px', marginBottom: '48px', flexWrap: 'wrap', justifyContent: 'center' }}>
             {eras.map(era => (
-              <div key={era.id} onClick={() => !era.comingSoon && setSelectedEra(era.id)} style={{ flex: '1 1 260px', minHeight: '360px', background: selectedEra === era.id ? '#E8EAF6' : 'white', border: selectedEra === era.id ? '2px solid #1A237E' : '1px solid #E2E8F0', borderRadius: '20px', padding: '32px', cursor: era.comingSoon ? 'default' : 'pointer', transition: 'all 0.3s', position: 'relative', display: 'flex', flexDirection: 'column', alignItems: 'center', boxShadow: selectedEra === era.id ? '0 20px 40px rgba(26, 35, 126, 0.15)' : '0 4px 12px rgba(0,0,0,0.03)', opacity: era.comingSoon ? 0.7 : 1, transform: selectedEra === era.id ? 'translateY(-8px)' : 'none' }}>
+              <div key={era.id} onClick={() => setSelectedEra(era.id)} style={{ flex: '1 1 260px', minHeight: '360px', background: selectedEra === era.id ? '#E8EAF6' : 'white', border: selectedEra === era.id ? '2px solid #1A237E' : '1px solid #E2E8F0', borderRadius: '20px', padding: '32px', cursor: 'pointer', transition: 'all 0.3s', position: 'relative', display: 'flex', flexDirection: 'column', alignItems: 'center', boxShadow: selectedEra === era.id ? '0 20px 40px rgba(26, 35, 126, 0.15)' : '0 4px 12px rgba(0,0,0,0.03)', transform: selectedEra === era.id ? 'translateY(-8px)' : 'none' }}>
                 <div style={{ fontSize: '56px', marginBottom: '20px' }}>{era.icon}</div>
                 <h3 style={{ fontSize: '15px', fontWeight: 900, color: '#1A237E' }}>{era.name}</h3>
                 <p style={{ fontSize: '11px', fontWeight: 700, color: '#546E7A', textTransform: 'uppercase' }}>{era.subtitle}</p>
                 <p style={{ fontSize: '13px', color: '#37474F', lineHeight: '1.6', margin: '20px 0', textAlign: 'center' }}>{era.desc}</p>
                 <div style={{ marginTop: 'auto' }}><span style={{ fontSize: '10px', fontWeight: 900, color: era.diffColor, background: era.diffColor + '12', padding: '4px 12px', borderRadius: '20px' }}>{era.difficulty}</span></div>
-                {era.comingSoon && <div style={{ position: 'absolute', inset: 0, background: 'rgba(255,255,255,0.6)', backdropFilter: 'blur(2px)', borderRadius: '20px', display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: 10 }}><span style={{ background: '#263238', color: 'white', padding: '6px 16px', borderRadius: '8px', fontWeight: 900, fontSize: '12px' }}>COMING SOON</span></div>}
               </div>
             ))}
           </div>
@@ -153,7 +165,7 @@ function App() {
   const activeCEOAirline = useMemo(() => airlineList.find(a => a.ceoPlayerId === currentPlayer.id), [airlineList, currentPlayer.id]);
 
   useEffect(() => {
-    if (!gameStarted) return;
+    if (!gameStarted || state.currentEvent || state.showIntro) return;
     if (currentPlayer && currentPlayer.isAI) {
       const timer = setTimeout(() => {
         const action = getAIAction(state, currentPlayer);
@@ -163,18 +175,190 @@ function App() {
     }
   }, [gameStarted, state.currentPlayerIndex, state.currentPhase, state, currentPlayer]);
 
+const IntroModal = ({ state, dispatch }: { state: GameState, dispatch: React.Dispatch<any> }) => {
+  const [activeTab, setActiveTab] = useState('summary');
+  const airlineList = Object.values(state.airlines);
+
+  return (
+    <div style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.9)', backdropFilter: 'blur(5px)', display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: 2000 }}>
+      <div style={{ 
+        background: '#F4F1EA', 
+        border: '8px double #4A4A4A', 
+        borderRadius: '4px', 
+        width: '95%', 
+        maxWidth: '1000px', 
+        height: '85vh', 
+        display: 'flex', 
+        flexDirection: 'column', 
+        overflow: 'hidden', 
+        boxShadow: '0 50px 100px rgba(0,0,0,0.8)',
+        fontFamily: '"Georgia", serif',
+        color: '#2C2C2C'
+      }}>
+        {/* TOP HEADER - OFFICIAL BRIEFING STYLE */}
+        <div style={{ padding: '30px 48px', borderBottom: '2px solid #4A4A4A', background: '#E9E4D9', display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
+          <div>
+            <div style={{ fontSize: '10px', fontWeight: 900, letterSpacing: '3px', color: '#5D5D5D', marginBottom: '4px' }}>DEPARTMENT OF STRATEGIC OVERSIGHT</div>
+            <h1 style={{ fontSize: '32px', fontWeight: 900, margin: 0, letterSpacing: '-1px', color: '#1A1A1A' }}>HISTORICAL INTELLIGENCE BRIEFING</h1>
+          </div>
+          <div style={{ textAlign: 'right' }}>
+            <div style={{ fontSize: '12px', fontWeight: 900 }}>CLASSIFICATION: <span style={{ color: '#B71C1C' }}>RESTRICTED</span></div>
+            <div style={{ fontSize: '12px' }}>DATE: MAY 1955</div>
+          </div>
+        </div>
+
+        <div style={{ flex: 1, display: 'flex', overflow: 'hidden' }}>
+          {/* LEFT TABS - FOLDER STYLE */}
+          <div style={{ width: '220px', background: '#DFD9CD', borderRight: '2px solid #4A4A4A', overflowY: 'auto', padding: '20px 0' }}>
+            <div 
+              onClick={() => setActiveTab('summary')}
+              style={{ 
+                padding: '16px 24px', 
+                cursor: 'pointer', 
+                fontSize: '13px', 
+                fontWeight: 900, 
+                letterSpacing: '1px',
+                background: activeTab === 'summary' ? '#F4F1EA' : 'transparent',
+                borderLeft: activeTab === 'summary' ? '8px solid #1A237E' : 'none',
+                color: activeTab === 'summary' ? '#1A1A1A' : '#5D5D5D',
+                marginBottom: '4px'
+              }}
+            >
+              MISSION SUMMARY
+            </div>
+            <div style={{ padding: '10px 24px', fontSize: '10px', fontWeight: 900, color: '#8D8D8D', letterSpacing: '2px', borderBottom: '1px solid #C0B7A6', margin: '10px 0' }}>ACTIVE CARRIERS</div>
+            {airlineList.map(a => (
+              <div 
+                key={a.id}
+                onClick={() => setActiveTab(a.id)}
+                style={{ 
+                  padding: '12px 24px', 
+                  cursor: 'pointer', 
+                  fontSize: '12px', 
+                  fontWeight: 700, 
+                  background: activeTab === a.id ? '#F4F1EA' : 'transparent',
+                  borderLeft: activeTab === a.id ? `8px solid ${a.color}` : 'none',
+                  color: activeTab === a.id ? '#1A1A1A' : '#5D5D5D',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '10px'
+                }}
+              >
+                <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: a.color }} />
+                {a.name.toUpperCase()}
+              </div>
+            ))}
+          </div>
+          
+          {/* MAIN CONTENT AREA - DOCUMENT STYLE */}
+          <div style={{ flex: 1, padding: '60px 80px', overflowY: 'auto', position: 'relative' }}>
+            <div style={{ position: 'absolute', top: '20px', right: '40px', opacity: 0.1, pointerEvents: 'none' }}>
+              <div style={{ border: '4px solid #B71C1C', color: '#B71C1C', padding: '10px 20px', fontSize: '32px', fontWeight: 900, transform: 'rotate(-15deg)' }}>APPROVED</div>
+            </div>
+
+            {activeTab === 'summary' ? (
+              <div style={{ maxWidth: '650px' }}>
+                <h2 style={{ fontSize: '24px', fontWeight: 900, borderBottom: '1px solid #1A1A1A', paddingBottom: '10px', marginBottom: '24px' }}>OPERATIONAL THEATER</h2>
+                <p style={{ fontSize: '17px', lineHeight: '1.8', marginBottom: '40px', textAlign: 'justify' }}>{state.eraIntro}</p>
+                
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '32px' }}>
+                  <div style={{ border: '1px solid #4A4A4A', padding: '24px' }}>
+                    <div style={{ fontSize: '11px', fontWeight: 900, color: '#5D5D5D', marginBottom: '12px', letterSpacing: '1px' }}>LOGISTICS PROFILE</div>
+                    <div style={{ fontSize: '28px', fontWeight: 900 }}>${state.fuelPrice} <span style={{ fontSize: '14px', fontWeight: 400 }}>/ SEGMENT</span></div>
+                    <div style={{ fontSize: '12px', marginTop: '4px' }}>Current Fuel Expenditure Rate</div>
+                  </div>
+                  <div style={{ border: '1px solid #4A4A4A', padding: '24px' }}>
+                    <div style={{ fontSize: '11px', fontWeight: 900, color: '#5D5D5D', marginBottom: '12px', letterSpacing: '1px' }}>ORDER OF BATTLE</div>
+                    <div style={{ fontSize: '28px', fontWeight: 900 }}>{airlineList.length} <span style={{ fontSize: '14px', fontWeight: 400 }}>TOTAL</span></div>
+                    <div style={{ fontSize: '12px', marginTop: '4px' }}>Identified Major Competitors</div>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <div style={{ maxWidth: '650px' }}>
+                {airlineList.filter(a => a.id === activeTab).map(a => (
+                  <div key={a.id}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '20px', marginBottom: '32px' }}>
+                      <div style={{ width: '64px', height: '64px', border: '2px solid #1A1A1A', background: a.color, display: 'flex', justifyContent: 'center', alignItems: 'center', color: getContrastColor(a.color), fontWeight: 900, fontSize: '24px', boxShadow: '4px 4px 0 #4A4A4A' }}>
+                        {AIRLINE_CODES[a.id] || a.id.substring(0, 2).toUpperCase()}
+                      </div>
+                      <h2 style={{ fontSize: '36px', fontWeight: 900, margin: 0, letterSpacing: '-1px' }}>{a.name}</h2>
+                    </div>
+                    
+                    <h3 style={{ fontSize: '14px', fontWeight: 900, color: '#5D5D5D', letterSpacing: '2px', borderBottom: '1px solid #C0B7A6', paddingBottom: '4px', marginBottom: '20px' }}>HISTORICAL DOSSIER</h3>
+                    <p style={{ fontSize: '17px', lineHeight: '1.8', marginBottom: '48px', textAlign: 'justify' }}>{a.history}</p>
+                    
+                    <div style={{ background: '#E9E4D9', border: '1px solid #4A4A4A', padding: '32px' }}>
+                      <h3 style={{ fontSize: '11px', fontWeight: 900, color: '#5D5D5D', marginBottom: '20px', letterSpacing: '2px', textAlign: 'center' }}>FIELD INTELLIGENCE - STARTING ASSETS</h3>
+                      <div style={{ display: 'flex', justifyContent: 'space-around', borderTop: '1px solid #4A4A4A', paddingTop: '20px' }}>
+                        <div style={{ textAlign: 'center' }}>
+                          <div style={{ fontSize: '32px', fontWeight: 900 }}>{a.routes.length}</div>
+                          <div style={{ fontSize: '11px', fontWeight: 900, color: '#5D5D5D' }}>SECTORS</div>
+                        </div>
+                        <div style={{ textAlign: 'center' }}>
+                          <div style={{ fontSize: '32px', fontWeight: 900 }}>{a.hubs.length}</div>
+                          <div style={{ fontSize: '11px', fontWeight: 900, color: '#5D5D5D' }}>OPERATIONS</div>
+                        </div>
+                        <div style={{ textAlign: 'center' }}>
+                          <div style={{ fontSize: '32px', fontWeight: 900 }}>${a.stockPrice}</div>
+                          <div style={{ fontSize: '11px', fontWeight: 900, color: '#5D5D5D' }}>MARKET CAP</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* BOTTOM BAR */}
+        <div style={{ padding: '30px 48px', borderTop: '2px solid #4A4A4A', textAlign: 'right', background: '#E9E4D9' }}>
+          <button 
+            onClick={() => dispatch({ type: 'DISMISS_INTRO' })}
+            style={{ 
+              background: '#1A1A1A', 
+              color: '#F4F1EA', 
+              border: 'none', 
+              borderRadius: '2px', 
+              padding: '18px 80px', 
+              fontSize: '14px', 
+              fontWeight: 900, 
+              cursor: 'pointer', 
+              letterSpacing: '2px',
+              boxShadow: '4px 4px 0 #5D5D5D',
+              fontFamily: '"Georgia", serif'
+            }}
+          >
+            AUTHORIZE MISSION START
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
   const handleStartGame = (era: string, names: string[], aiFlags: boolean[]) => {
-    const newPlayers = names.map((name, i) => ({ id: `P${i + 1}`, name, cash: 80, holdings: {}, isAI: aiFlags[i] }));
-    dispatch({ type: 'START_GAME', payload: { players: newPlayers } });
+    const newPlayers = names.map((name, i) => ({ id: `P${i + 1}`, name, cash: 40, holdings: {}, isAI: aiFlags[i] }));
+    dispatch({ type: 'START_GAME', payload: { players: newPlayers, era } });
     setGameStarted(true);
   };
 
   const handleSlotClick = (routeId: string, slot: 'primary' | 'secondary') => {
     if (state.currentPhase !== 'PLAN_ROUTES' || !activeCEOAirline || currentPlayer.isAI) return;
-    const current = state.routeState[routeId]?.[slot];
-    if (current === activeCEOAirline.id) dispatch({ type: 'REMOVE_ROUTE', payload: { airlineId: activeCEOAirline.id, routeId, slot } });
-    else if (!current) dispatch({ type: 'PLACE_ROUTE', payload: { airlineId: activeCEOAirline.id, routeId, slot } });
-    else alert("Occupied.");
+    const currentSlots = state.routeState[routeId];
+    const current = currentSlots?.[slot];
+    
+    if (current === activeCEOAirline.id) {
+      dispatch({ type: 'REMOVE_ROUTE', payload: { airlineId: activeCEOAirline.id, routeId, slot } });
+    } else if (!current) {
+      // Check if they already own the OTHER slot
+      if (currentSlots && (currentSlots.primary === activeCEOAirline.id || currentSlots.secondary === activeCEOAirline.id)) {
+        alert("You already have a presence on this route. One airline per route line.");
+        return;
+      }
+      dispatch({ type: 'PLACE_ROUTE', payload: { airlineId: activeCEOAirline.id, routeId, slot } });
+    } else alert("Occupied.");
   };
 
   const handleBuy = () => {
@@ -195,7 +379,9 @@ function App() {
     if (state.currentPhase !== 'PLAN_ROUTES' || !activeCEOAirline || currentPlayer.isAI) return;
     if (airlineList.some(a => a.hubs.includes(cityId))) { alert("Hub exists."); return; }
     if (activeCEOAirline.treasury < 15) { alert("No funds."); return; }
-    dispatch({ type: 'BUILD_HUB', payload: { airlineId: activeCEOAirline.id, cityId } });
+    if (window.confirm(`Build hub in ${cityId} for $15?`)) {
+      dispatch({ type: 'BUILD_HUB', payload: { airlineId: activeCEOAirline.id, cityId } });
+    }
   };
 
   const handleMA = () => {
@@ -221,6 +407,8 @@ function App() {
         airlineHubs={Object.fromEntries(airlineList.map(a => [a.id, a.hubs]))}
         activeAirlineId={activeCEOAirline?.id || null} isPlanning={state.currentPhase === 'PLAN_ROUTES'}
       />
+
+      {state.showIntro && <IntroModal state={state} dispatch={dispatch} />}
 
       {/* TOP LEFT - Dynamic Operational HUD */}
       <div style={{ position: 'absolute', top: '12px', left: '12px', zIndex: 100, background: 'rgba(255,255,255,0.92)', border: '0.5px solid #B0BEC5', borderRadius: '12px', padding: '10px 14px', minWidth: '180px', boxShadow: '0 4px 12px rgba(0,0,0,0.08)' }}>
@@ -273,15 +461,47 @@ function App() {
             <span style={{ fontSize: '16px' }}>{btn.icon}</span>
             <span style={{ fontSize: '9px', fontWeight: 'bold', color: btn.color }}>{btn.label}</span>
             {activePanel === btn.id && (
-              <div onClick={e => e.stopPropagation()} style={{ position: 'absolute', right: '56px', top: 0, width: '240px', background: 'rgba(255,255,255,0.96)', border: '0.5px solid #B0BEC5', borderRadius: '10px', padding: '10px', boxShadow: '0 4px 12px rgba(0,0,0,0.1)', maxHeight: '70vh', overflowY: 'auto', cursor: 'default' }}>
+              <div onClick={e => e.stopPropagation()} style={{ position: 'absolute', right: '56px', top: '50%', transform: 'translateY(-50%)', width: btn.id === 'airlines' ? '500px' : '240px', background: 'rgba(255,255,255,0.96)', border: '0.5px solid #B0BEC5', borderRadius: '10px', padding: '10px', boxShadow: '0 4px 12px rgba(0,0,0,0.1)', maxHeight: '85vh', overflowY: 'auto', cursor: 'default' }}>
                 <CollapsibleSection title={btn.id.toUpperCase()}>
-                  {btn.id === 'airlines' && airlineList.map(a => (
-                    <div key={a.id} style={{ marginBottom: '8px', borderLeft: `3px solid ${a.color}`, paddingLeft: '8px', background: '#F5F8FA', borderRadius: '4px', padding: '6px' }}>
-                      <div style={{ display: 'flex', justifyContent: 'space-between', fontWeight: 900, fontSize: '11px' }}><span>{a.name}</span><span style={{ color: '#E65100' }}>${a.stockPrice}</span></div>
-                      <div style={{ fontSize: '10px', marginTop: '4px' }}>Tr: ${a.treasury} | Hubs: {a.hubs.length}</div>
-                      <div style={{ fontSize: '10px', color: '#B71C1C', fontWeight: 700 }}>Next Exp: ${calculateProjectedExpenses(a, state.fuelPrice)}</div>
-                    </div>
-                  ))}
+                  <div style={{ display: btn.id === 'airlines' ? 'grid' : 'block', gridTemplateColumns: btn.id === 'airlines' ? '1fr 1fr' : 'none', gap: '8px' }}>
+                    {btn.id === 'airlines' && airlineList.map(a => {
+                      const revenue = Object.entries(state.routeState).reduce((acc, [routeId, slotState]) => {
+                        const routeDef = ROUTES.find(r => r.id === routeId);
+                        if (!routeDef || (slotState.primary !== a.id && slotState.secondary !== a.id)) return acc;
+                        
+                        let routeRev = (state.cityDemand[routeDef.from] ?? 1) + (state.cityDemand[routeDef.to] ?? 1);
+                        if (a.hubs.includes(routeDef.from) || a.hubs.includes(routeDef.to)) routeRev += 2;
+                        if (slotState.primary && slotState.secondary && slotState.primary !== slotState.secondary) routeRev -= 2;
+                        
+                        let count = 0;
+                        if (slotState.primary === a.id) count++;
+                        if (slotState.secondary === a.id) count++;
+                        
+                        return acc + (routeRev * count);
+                      }, 0);
+                      const expenses = calculateProjectedExpenses(a, state.fuelPrice);
+                      const profit = revenue - expenses;
+
+                      return (
+                        <div key={a.id} style={{ borderLeft: `3px solid ${a.color}`, paddingLeft: '8px', background: '#F5F8FA', borderRadius: '4px', padding: '6px' }}>
+                          <div style={{ display: 'flex', justifyContent: 'space-between', fontWeight: 900, fontSize: '11px' }}>
+                            <span>{a.name}</span>
+                            <span style={{ color: '#E65100' }}>${a.stockPrice}</span>
+                          </div>
+                          <div style={{ fontSize: '10px', marginTop: '4px' }}>
+                            Tr: ${a.treasury} | Hubs: {a.hubs.length}
+                          </div>
+                          <div style={{ fontSize: '10px', marginTop: '2px', display: 'flex', justifyContent: 'space-between' }}>
+                            <span>Rev: <span style={{ color: '#2E7D32', fontWeight: 700 }}>+${revenue}</span></span>
+                            <span>Exp: <span style={{ color: '#B71C1C', fontWeight: 700 }}>-${expenses}</span></span>
+                          </div>
+                          <div style={{ fontSize: '10px', marginTop: '2px', fontWeight: 900, color: profit >= 0 ? '#1B5E20' : '#B71C1C', textAlign: 'right' }}>
+                            Est. Profit: {profit >= 0 ? '+' : ''}${profit}
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
                   {btn.id === 'players' && state.players.map(p => (
                     <div key={p.id} style={{ padding: '6px', borderRadius: '6px', background: p.id === currentPlayer.id ? '#E8EAF6' : '#F5F8FA', marginBottom: '4px' }}>
                       <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '11px', fontWeight: 800 }}><span>{p.name} {p.isAI ? '(AI)' : ''}</span><span>${p.cash}</span></div>
@@ -339,9 +559,9 @@ function App() {
                       {airlineList.filter(a => a.id !== activeCEOAirline.id && !a.isBankrupt).map(a => <option key={a.id} value={a.id}>{a.name}</option>)}
                     </select>
                     <button onClick={handleMA} disabled={!targetAirlineId} style={{ background: '#B71C1C', color: 'white', border: 'none', borderRadius: '8px', padding: '7px 12px', fontSize: '11px', fontWeight: 900, cursor: 'pointer', opacity: targetAirlineId ? 1 : 0.5 }}>DECLARE M&A</button>
-                    <button onClick={() => dispatch({ type: 'ADVANCE_PHASE' })} style={{ background: '#1A237E', color: 'white', border: 'none', borderRadius: '8px', padding: '7px 16px', fontSize: '12px', fontWeight: 600, cursor: 'pointer' }}>DONE →</button>
+                    <button onClick={() => dispatch({ type: 'PASS_TURN', payload: { playerId: currentPlayer.id } })} style={{ background: '#1A237E', color: 'white', border: 'none', borderRadius: '8px', padding: '7px 16px', fontSize: '12px', fontWeight: 600, cursor: 'pointer' }}>DONE →</button>
                   </>
-                ) : <button onClick={() => dispatch({ type: 'ADVANCE_PHASE' })} style={{ background: '#1A237E', color: 'white', border: 'none', borderRadius: '8px', padding: '7px 16px', fontSize: '12px', fontWeight: 600, cursor: 'pointer' }}>SKIP</button>}
+                ) : <button onClick={() => dispatch({ type: 'PASS_TURN', payload: { playerId: currentPlayer.id } })} style={{ background: '#1A237E', color: 'white', border: 'none', borderRadius: '8px', padding: '7px 16px', fontSize: '12px', fontWeight: 600, cursor: 'pointer' }}>SKIP</button>}
               </div>
             )}
             {state.currentPhase === 'DIVIDENDS' && (
@@ -353,7 +573,7 @@ function App() {
                     <button onClick={() => dispatch({ type: 'DECLARE_DIVIDEND', payload: { airlineId: activeCEOAirline.id, perShareAmount: divAmount } })} style={{ background: '#1A237E', color: 'white', border: 'none', borderRadius: '8px', padding: '7px 16px', fontSize: '12px', fontWeight: 600, cursor: 'pointer' }}>DECLARE</button>
                    </>
                  ) : null}
-                 <button onClick={() => dispatch({ type: 'ADVANCE_PHASE' })} style={{ background: '#1A237E', color: 'white', border: 'none', borderRadius: '8px', padding: '7px 16px', fontSize: '12px', fontWeight: 600, cursor: 'pointer' }}>CONTINUE</button>
+                 <button onClick={() => dispatch({ type: 'PASS_TURN', payload: { playerId: currentPlayer.id } })} style={{ background: '#1A237E', color: 'white', border: 'none', borderRadius: '8px', padding: '7px 16px', fontSize: '12px', fontWeight: 600, cursor: 'pointer' }}>CONTINUE</button>
               </div>
             )}
             {!['STOCK_MARKET', 'PLAN_ROUTES', 'DIVIDENDS'].includes(state.currentPhase) && <button onClick={() => dispatch({ type: 'ADVANCE_PHASE' })} style={{ background: '#1A237E', color: 'white', border: 'none', borderRadius: '8px', padding: '7px 32px', fontSize: '12px', fontWeight: 600, cursor: 'pointer' }}>CONTINUE</button>}
@@ -365,16 +585,45 @@ function App() {
         {activePanel !== 'legend' ? (
           <div onClick={() => togglePanel('legend')} style={{ background: 'rgba(255,255,255,0.88)', border: '0.5px solid #B0BEC5', borderRadius: '10px', padding: '4px 10px', fontSize: '10px', color: '#546E7A', cursor: 'pointer', boxShadow: '0 1px 4px rgba(0,0,0,0.08)' }}>LEGEND ▲</div>
         ) : (
-          <div onClick={() => togglePanel('legend')} style={{ background: 'rgba(255,255,255,0.92)', border: '0.5px solid #B0BEC5', borderRadius: '10px', padding: '8px 12px', fontSize: '10px', color: '#37474F', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}>
-            <div style={{ marginBottom: '4px' }}>— dashed — "Empty slot"</div>
+          <div onClick={() => togglePanel('legend')} style={{ background: 'rgba(255,255,255,0.92)', border: '0.5px solid #B0BEC5', borderRadius: '10px', padding: '12px 16px', fontSize: '10px', color: '#37474F', boxShadow: '0 4px 12px rgba(0,0,0,0.1)', width: '220px' }}>
+            <div style={{ fontWeight: 900, marginBottom: '8px', borderBottom: '1px solid #CFD8DC', paddingBottom: '4px', fontSize: '11px' }}>MAP LEGEND</div>
+            <div style={{ marginBottom: '4px' }}>— dashed — "Available slot"</div>
             <div style={{ marginBottom: '4px' }}>── solid — "Claimed route"</div>
             <div style={{ marginBottom: '4px' }}>⊙ ring — "Hub city"</div>
             <div style={{ marginBottom: '4px' }}>● large — "Mega-Hub"</div>
-            <div style={{ marginBottom: '4px' }}>• med — "Focus City"</div>
-            <div>· small — "Regional"</div>
+            <div style={{ marginBottom: '8px' }}>· small — "Regional"</div>
+
+            <div style={{ fontWeight: 900, marginBottom: '8px', borderBottom: '1px solid #CFD8DC', paddingBottom: '4px', fontSize: '11px', marginTop: '12px' }}>RULEBOOK REFERENCE</div>
+            <div style={{ marginBottom: '4px', fontWeight: 700, color: '#2E7D32' }}>REVENUE Formula:</div>
+            <div style={{ marginBottom: '6px', fontStyle: 'italic' }}>(From Demand + To Demand) + (Hub Bonus: +$2 per route) - (Fare War: -$2)</div>
+            
+            <div style={{ marginBottom: '4px', fontWeight: 700, color: '#B71C1C' }}>EXPENSES Formula:</div>
+            <div style={{ marginBottom: '6px', fontStyle: 'italic' }}>(Routes x Fuel) + Hub Tax (Multiplier x Fuel)</div>
+            <div style={{ marginBottom: '6px', fontSize: '9px', color: '#546E7A' }}>* Hub Multipliers: 1st=2x, 2nd=3x, 3rd+=5x</div>
+
+            <div style={{ marginBottom: '4px', fontWeight: 700, color: '#E65100' }}>VALUATION Formula:</div>
+            <div style={{ fontStyle: 'italic' }}>Stock Price = Total Revenue / 2</div>
+            <div style={{ fontSize: '9px', color: '#546E7A', marginTop: '2px' }}>* Minimum Price: $1 | Rounded Down</div>
           </div>
         )}
       </div>
+
+      {state.currentEvent && (
+        <div style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.5)', backdropFilter: 'blur(4px)', display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: 1000 }}>
+          <div style={{ background: 'white', padding: '40px', borderRadius: '24px', maxWidth: '400px', width: '90%', textAlign: 'center', boxShadow: '0 20px 40px rgba(0,0,0,0.2)', animation: 'slideUp 0.3s ease-out' }}>
+            <div style={{ fontSize: '48px', marginBottom: '16px' }}>📰</div>
+            <h2 style={{ fontSize: '24px', fontWeight: 900, color: '#1A237E', marginBottom: '8px' }}>{state.currentEvent.title}</h2>
+            <p style={{ fontSize: '14px', color: '#546E7A', marginBottom: '24px', lineHeight: '1.6' }}>{state.currentEvent.description}</p>
+            <div style={{ background: '#F5F8FA', padding: '16px', borderRadius: '12px', fontSize: '16px', fontWeight: 700, color: '#37474F', marginBottom: '32px' }}>
+              {state.currentEvent.effect}
+            </div>
+            <button onClick={() => dispatch({ type: 'DISMISS_EVENT' })} style={{ background: '#1A237E', color: 'white', border: 'none', borderRadius: '12px', padding: '16px 40px', fontSize: '16px', fontWeight: 900, cursor: 'pointer', boxShadow: '0 8px 16px rgba(26, 35, 126, 0.2)' }}>
+              ACKNOWLEDGE
+            </button>
+          </div>
+        </div>
+      )}
+
     </div>
   );
 }

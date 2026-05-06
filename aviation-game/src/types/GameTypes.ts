@@ -12,6 +12,7 @@ export interface Airline {
   ceoPlayerId: string | null
   isBankrupt?: boolean
   freeRoutePlacements?: number
+  history?: string        // Historical context for intro popup
 }
 
 export interface Player {
@@ -50,4 +51,8 @@ export interface GameState {
   activeMA: MandA | null
   gameLog: string[]
   passedPlayers: string[] // IDs of players who passed in current phase
+  passedAirlines: string[] // IDs of airlines who passed in current phase
+  currentEvent?: { title: string; description: string; effect: string } | null
+  showIntro?: boolean
+  eraIntro?: string
 }

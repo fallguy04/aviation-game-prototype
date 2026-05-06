@@ -26,9 +26,9 @@ Object.entries(ghostRoutes).forEach(([airlineId, routeIds]) => {
 
 export const initialState: GameState = {
   players: [
-    { id: 'P1', name: 'Player 1', cash: 80, holdings: {} },
-    { id: 'P2', name: 'Player 2', cash: 80, holdings: {} },
-    { id: 'P3', name: 'Player 3', cash: 80, holdings: {} },
+    { id: 'P1', name: 'Player 1', cash: 80, holdings: {}, isAI: false },
+    { id: 'P2', name: 'Player 2', cash: 80, holdings: {}, isAI: false },
+    { id: 'P3', name: 'Player 3', cash: 80, holdings: {}, isAI: false },
   ],
   airlines: {
     'Continental': {

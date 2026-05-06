@@ -166,13 +166,24 @@ const MapComponent: React.FC<MapComponentProps> = ({
 
             return (
               <g key={route.id}>
+                {/* Hitboxes for easier clicking */}
+                <line 
+                  x1={from.x - nx * offset} y1={from.y - ny * offset} x2={to.x - nx * offset} y2={to.y - ny * offset}
+                  stroke="transparent" strokeWidth="15" style={{ cursor: isPlanning ? 'crosshair' : 'pointer' }}
+                  onClick={() => !hasMoved && onSlotClick(route.id, 'primary')} 
+                />
+                <line 
+                  x1={from.x + nx * offset} y1={from.y + ny * offset} x2={to.x + nx * offset} y2={to.y + ny * offset}
+                  stroke="transparent" strokeWidth="15" style={{ cursor: isPlanning ? 'crosshair' : 'pointer' }}
+                  onClick={() => !hasMoved && onSlotClick(route.id, 'secondary')} 
+                />
+
                 <line 
                   x1={from.x - nx * offset} y1={from.y - ny * offset} x2={to.x - nx * offset} y2={to.y - ny * offset}
                   stroke={state.primary ? airlineColors[state.primary] : '#B0BEC5'} 
                   strokeWidth={state.primary ? 3 : 1} strokeOpacity={state.primary ? 0.9 : 0.6} strokeDasharray={state.primary ? "none" : "3 3"}
                   className={isPulsing(state.primary) ? 'route-pulse' : ''}
-                  style={{ cursor: isPlanning ? 'crosshair' : 'pointer' }} 
-                  onClick={() => !hasMoved && onSlotClick(route.id, 'primary')} 
+                  pointerEvents="none"
                 />
                 {state.primary && renderPill(state.primary, 'primary')}
                 
@@ -183,8 +194,7 @@ const MapComponent: React.FC<MapComponentProps> = ({
                       stroke={state.secondary ? airlineColors[state.secondary] : '#B0BEC5'} 
                       strokeWidth={state.secondary ? 3 : 1} strokeOpacity={state.secondary ? 0.9 : 0.6} strokeDasharray={state.secondary ? "none" : "3 3"}
                       className={isPulsing(state.secondary) ? 'route-pulse' : ''}
-                      style={{ cursor: isPlanning ? 'crosshair' : 'pointer' }} 
-                      onClick={() => !hasMoved && onSlotClick(route.id, 'secondary')} 
+                      pointerEvents="none"
                     />
                     {state.secondary && renderPill(state.secondary, 'secondary')}
                   </>
@@ -195,12 +205,38 @@ const MapComponent: React.FC<MapComponentProps> = ({
 
           {CITIES.map(city => {
             if (city.x < 0) return null;
-            const demand = cityDemand[city.id] || 0;
+            const demand = cityDemand[city.id] !== undefined ? cityDemand[city.id] : 1;
             const radius = getRadius(city.tier, demand);
             let hubAirlineId: string | null = null;
             Object.entries(airlineHubs).forEach(([aid, hubs]) => { if (hubs.includes(city.id)) hubAirlineId = aid; });
+            
+            // Render demand cubes (small squares)
+            const renderCubes = () => {
+              const cubes = [];
+              const cubeSize = 4;
+              const spacing = 1;
+              for (let i = 0; i < (demand || 0); i++) {
+                const ox = (i % 3) * (cubeSize + spacing) - 7;
+                const oy = Math.floor(i / 3) * (cubeSize + spacing) - radius - 12;
+                cubes.push(
+                  <rect 
+                    key={`cube-${city.id}-${i}`}
+                    x={city.x + ox}
+                    y={city.y + oy}
+                    width={cubeSize}
+                    height={cubeSize}
+                    fill="#1A237E"
+                    opacity="0.8"
+                    pointerEvents="none"
+                  />
+                );
+              }
+              return cubes;
+            };
+
             return (
               <g key={city.id} style={{ cursor: 'pointer' }} onClick={() => !hasMoved && onCityClick(city.id)}>
+                {renderCubes()}
                 {hubAirlineId && <circle cx={city.x} cy={city.y} r={radius + 5} stroke={airlineColors[hubAirlineId]} strokeWidth="2" fill="none" />}
                 <circle cx={city.x} cy={city.y} r={radius} fill="white" stroke="#455A64" strokeWidth="1.5" />
                 {hubAirlineId && <rect x={city.x - 2} y={city.y - 2} width="4" height="4" transform={`rotate(45, ${city.x}, ${city.y})`} fill={airlineColors[hubAirlineId]} />}

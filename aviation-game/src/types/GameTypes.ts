@@ -19,6 +19,7 @@ export interface Player {
   name: string
   cash: number
   holdings: Record<string, number>  // airlineId -> share count
+  isAI: boolean
 }
 
 export interface RouteSlotState {
